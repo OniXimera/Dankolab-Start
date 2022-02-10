@@ -8,7 +8,6 @@ using System;
 
 public class PlayfieldGeneration : MonoBehaviour
 {
-    //[SerializeField] GridLayoutGroup _gridLayoutGroup;
     [SerializeField] GameObject _prefab;
     [SerializeField] TMP_InputField _widthInput;
     [SerializeField] TMP_InputField _heightInput;
@@ -63,7 +62,6 @@ public class PlayfieldGeneration : MonoBehaviour
 
         _move = _score = 0;
         
-
         float widthPole = GetComponent<RectTransform>().rect.width; //Вычисляем максимальный размер блока.
         float heightPole = GetComponent<RectTransform>().rect.height;
         if (widthPole / _width < heightPole / _height)
@@ -74,7 +72,7 @@ public class PlayfieldGeneration : MonoBehaviour
         _startPosition = new Vector2(_cube * (_width - 1) / -2, _cube * (_height - 1) / 2);
         _virtualField = new GameObject[_width, _height];
 
-        foreach (Button child in GetComponentsInChildren<Button>()) //Отчистка поля.
+        foreach (Button child in GetComponentsInChildren<Button>()) //Отчистка поля если необходимо.
         {
             child.gameObject.GetComponent<Button>().onClick.RemoveAllListeners();
             DestroyImmediate(child.gameObject);
@@ -179,12 +177,13 @@ public class PlayfieldGeneration : MonoBehaviour
                 Destroy(_virtualField[item[0], item[1]]);
                 _virtualField[item[0], item[1]] = null;
             }
+
             SettleBlocks(_blockCoincidencesColor);
+
             _move++;
             _score += _blockCoincidencesColor.Count * 2 - 3;
             UpdateScoreAndMove();
         }
-        
         if (!CheckForMove()) //Проверка на наличие ходов.
             _messageText.ShowMessage("Игра окончена! Вы заработали " + _score + " очков!");
     }
@@ -218,6 +217,7 @@ public class PlayfieldGeneration : MonoBehaviour
                 }
             }
         }
+
         GameFieldRendering();
     }
 
